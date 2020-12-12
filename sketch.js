@@ -1,9 +1,15 @@
 var helicopterIMG, helicopterSprite, packageSprite,packageIMG;
-var packageBody,ground
+var packageBody,ground;
+var engine,world;
 const Engine = Matter.Engine;
 const World = Matter.World;
 const Bodies = Matter.Bodies;
 const Body = Matter.Body;
+
+
+var part1;
+var part2;
+var part3;
 
 function preload()
 {
@@ -14,11 +20,17 @@ function preload()
 function setup() {
 	createCanvas(800, 700);
 	rectMode(CENTER);
-	
+	engine = Engine.create();
+    world = engine.world;
+
 
 	packageSprite=createSprite(width/2, 80, 10,10);
 	packageSprite.addImage(packageIMG)
 	packageSprite.scale=0.2
+
+	part1 = new box(499,610,20,100);
+	part2 = new box(390,650,200,20);
+	part3 = new box(300,610,20,100);
 
 	helicopterSprite=createSprite(width/2, 200, 10,10);
 	helicopterSprite.addImage(helicopterIMG)
@@ -31,7 +43,7 @@ function setup() {
 	engine = Engine.create();
 	world = engine.world;
 
-	packageBody = Bodies.circle(width/2 , 200 , 5 , {restitution:3, isStatic:true});
+	packageBody = Bodies.circle(width/2 , 200 , 5 , {restitution:0.5, isStatic:true});
 	World.add(world, packageBody);
 	
 
@@ -51,9 +63,10 @@ function draw() {
   Engine.update(engine);
   packageSprite.x= packageBody.position.x 
   packageSprite.y= packageBody.position.y 
-  isTouching();
   keyPressed();
-
+  part1.display();
+  part2.display();
+  part3.display();
  
   
   drawSprites();
@@ -65,13 +78,5 @@ function keyPressed() {
 	Matter.Body.setStatic(packageBody,false);
 
   }
-}
-function isTouching( packageBody,ground ){
-    if (packageBody.x - ground.x < ground.width/2 + packageBody.width/2
-      && ground.x - packageBody.x < ground.width/2 + packageBody.width/2
-      && packageBody.y - ground.y < ground.height/2 + packageBody.height/2
-      && ground.y - packageBody.y < ground.height/2 + packageBody.height/2) {
-     
-   }
 }
 
